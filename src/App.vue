@@ -35,6 +35,9 @@
               <v-textarea
                   v-model="template"
                   label="Template"
+
+                  :error="error"
+                  :error-messages="errorMessages"
               ></v-textarea>
 
               <v-select
@@ -89,7 +92,10 @@ export default {
       rows: [],
 
       template: '',
-      extension: 'tex'
+      extension: 'tex',
+
+      error: false,
+      errorMessages: []
     }
   },
 
@@ -122,6 +128,9 @@ export default {
       this.processing = true;
 
       try {
+        this.error = false
+        this.errorMessages = []
+
         let filename = this.inputFile.name
         filename = filename.substring(0, filename.indexOf('.'))
 
@@ -139,7 +148,8 @@ export default {
 
         document.body.removeChild(element);
       } catch(e) {
-        console.log(e)
+        this.error = true
+        this.errorMessages = [e.toString()]
       }
 
       this.processing = false;
